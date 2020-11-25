@@ -8,17 +8,24 @@ tokenizer = Tokenizer()
 logger = Debugger("outLog.log")
 
 def prob1():
-    sentenses = sys.argv[1];
+    with open("sentenses.txt","r",encoding="utf-8") as f:
+        sentenses = f.read()
     logger.println(len(sentenses))
     count = 1
+    outSentenses = ""
     for token in tokenizer.tokenize(sentenses):
         if(token.part_of_speech.split(",")[1] in ["固有名詞"] and random.randint(0,len(sentenses)//600) == 0):
-            logger.println("({})".format(count),end="")
+            outSentenses += "({})".format(count)
             count+=1
         else:
-            logger.println(token.surface,end="")
+            outSentenses += token.surface
+    outSentenses += "\n"
         #logger.println("["+str(token)+"]",end="")
+    for j in range(count-1):
+        outSentenses += "({}). \n".format(j+1)
     logger.println()
+    with open("sentensesOut.txt","w",encoding="utf-8") as f:
+        f.write(outSentenses)
 
 def prop2():
     hinsiCounter = {}
@@ -54,7 +61,7 @@ def prop2():
     with open("sentensesOut.txt","w",encoding="utf-8") as f:
         f.write(outSentenses)
     logger.println(outSentenses)
-prop2()
+#prop2()
 
 pattern = r"((助動詞)*(名詞)+(名詞接尾)?(助動詞)*(名詞非自立)?(助動詞)*(助詞)*(記号)*)|((動詞)(助動詞)*(名詞接尾)*(助詞)*(記号)*)|(副詞)(助詞)*|(名詞)(動詞)|(感動詞)(記号)*|((形容詞)(助動詞)*(助詞)*)|((接続詞)(記号)*)"
 
@@ -85,6 +92,7 @@ def prob3():
             end = 0
             outStr += temp + "/"
     logger.println(outStr)
-prob3()
+#prob3()
 
+prob1()
 logger.flush()
